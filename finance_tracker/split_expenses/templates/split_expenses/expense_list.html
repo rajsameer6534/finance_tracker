@@ -1,0 +1,12 @@
+<h2>Your Expenses</h2>
+<ul>
+    {% for expense in expenses %}
+    <li>{{ expense.description }} - {{ expense.total_amount }} - Splits:
+        <ul>
+            {% for split in expense.splits.all %}
+            <li>{{ split.user.username }} owes {{ split.amount_owed }} - Paid: {{ split.paid }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>

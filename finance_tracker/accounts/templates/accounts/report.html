@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Report</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-image: url('https://media.istockphoto.com/id/863469700/photo/abstract-financial-chart-with-graph-in-double-exposure-style-on-white-color-background.webp?b=1&s=170667a&w=0&k=20&c=kZ37W6n9XCaMhC0JIpdujvqji_r_3IieG1C2Mimf9qg=');
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            color: #666;
+        }
+        .btn-primary {
+            background-color: #337ab7;
+            border-color: #2e6da4;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .btn-primary:hover {
+            background-color: #23527c;
+            border-color: #1d4e73;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-4 mb-4 text-center">Monthly Report</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <p>Total Income: ${{ income }}</p>
+                <p>Total Expenses: ${{ expenses }}</p>
+                <p>Total Savings: ${{ savings }}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="savingsChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <p><a href="{% url 'dashboard' %}" class="btn btn-primary mt-3">Back to Dashboard</a></p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Get data from Django template
+        var income = {{ income|default_if_none:"0" }};
+        var expenses = {{ expenses|default_if_none:"0" }};
+        var savings = {{ savings|default_if_none:"0" }};
+
+        // Calculate savings
+        var totalSavings = income - expenses;
+
+        // Chart.js configuration
+        var ctxSavings = document.getElementById('savingsChart').getContext('2d');
+        var savingsChart = new Chart(ctxSavings, {
+            type: 'pie',
+            data: {
+                labels: ['Income', 'Expenses', 'Savings'],
+                datasets: [{
+                    label: 'Monthly Report',
+                    data: [income, expenses, totalSavings],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': $' + tooltipItem.raw.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

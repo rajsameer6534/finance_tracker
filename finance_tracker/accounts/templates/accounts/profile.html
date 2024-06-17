@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 50px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+
+        nav {
+            margin-top: 50px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li {
+            margin-bottom: 10px;
+        }
+
+        nav a {
+            display: block;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #f7f7f7;
+        }
+
+        h3 {
+            margin-top: 50px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            display: block;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #f7f7f7;
+        }
+
+        .transaction-list {
+            margin-top: 50px;
+        }
+
+        .transaction-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .transaction-list .date {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .transaction-list .type {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .transaction-list .amount {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .transaction-list .actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .transaction-list a {
+            margin-left: 10px;
+            padding: 5px;
+            background-color: #f5f5f5;
+           border-radius: 5px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .transaction-list a:hover {
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Profile</h2>
+        <p>Welcome, {{ user.username }}!</p>
+
+        <nav>
+            <ul>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'report' %}">Monthly Report</a></li>
+            </ul>
+        </nav>
+
+        <h3>Manage Transactions</h3>
+        <ul>
+            <li><a href="{% url 'split_expenses:create_expense' %}">Create Split Expense</a></li>
+            <li><a href="{% url 'split_expenses:expense_list' %}">View Split Expenses</a></li>
+            <li><a href="{% url 'add_income_source' %}">Add Income Source</a></li>
+            <li><a href="{% url 'add_expense_category' %}">Add Expense Category</a></li>
+            <li><a href="{% url 'add_transaction' %}">Add Transaction</a></li>
+        </ul>
+
+        <h3>Your Transactions</h3>
+        <ul class="transaction-list">
+            {% for transaction in user.transaction_set.all %}
+                <li>
+                    <span class="date">{{ transaction.date }}</span>
+                    <span class="type">{{ transaction.get_type_display }}</span>
+                    <span class="amount">{{ transaction.amount }}</span>
+                    <div class="actions">
+                        <a href="{% url 'edit_transaction' transaction.pk %}">Edit</a>
+                        <a href="{% url 'delete_transaction' transaction.pk %}">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+    </div>
+</body>
+</html>

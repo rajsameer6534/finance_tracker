@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .chart-container {
+            margin-bottom: 20px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chart-title {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-4 mb-4 text-center">Dashboard</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card chart-container">
+                    <div class="card-body">
+                        <h5 class="card-title chart-title">Income Chart</h5>
+                        <canvas id="incomeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card chart-container">
+                    <div class="card-body">
+                        <h5 class="card-title chart-title">Expenses Chart</h5>
+                        <canvas id="expensesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Get data from Django template
+        var incomeData = JSON.parse('{{ income_data|escapejs }}');
+        var expensesData = JSON.parse('{{ expenses_data|escapejs }}');
+
+        // Chart.js configuration
+        var ctxIncome = document.getElementById('incomeChart').getContext('2d');
+        var incomeChart = new Chart(ctxIncome, {
+            type: 'line',
+            data: {
+                labels: incomeData.labels,
+                datasets: [{
+                    label: 'Income',
+                    data: incomeData.data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctxExpenses = document.getElementById('expensesChart').getContext('2d');
+        var expensesChart = new Chart(ctxExpenses, {
+            type: 'line',
+            data: {
+                labels: expensesData.labels,
+                datasets: [{
+                    label: 'Expenses',
+                    data: expensesData.data,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #f0f0f0 url('https://source.unsplash.com/1600x900/?clouds,sky,technology') no-repeat center center fixed;
+            background-size: cover;
+            animation: gradient 10s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+       .card {
+            margin: 0 auto;
+            max-width: 400px;
+            margin-top: 100px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: bold;
+        }
+
+       .social-login {
+            margin-bottom: 20px;
+        }
+
+       .social-login a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+
+       .social-login a:hover {
+            color: #23527c;
+        }
+
+       .form-control {
+            border-radius: 5px;
+            border-color: #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+       .btn-primary {
+            border-radius: 5px;
+            padding: 10px 30px;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+       .btn-primary:hover {
+            background-color: #23527c;
+            border-color: #23527c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Login</h2>
+            <div class="social-login">
+                <a href="{% provider_login_url 'google' %}">Sign in with Google</a>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
